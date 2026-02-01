@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --bg-color: #f0f0f0;
+  --sidebar-bg: #d9d9d9;
+  --text-active: #000;
+  --text-muted: #666;
+  --accent-color: #4a90e2;
+  --pixel-border: 4px;
+  --font-pixel: 'VT323', monospace;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-pixel);
+  background-color: var(--bg-color);
+  color: var(--text-active);
+  font-size: 20px;
+}
+
+#app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  background-color: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  border-right: var(--pixel-border) solid #000;
+}
+
+.resort-item {
+  padding: 15px 25px;
+  cursor: pointer;
+  background: #ccc;
+  margin: 5px 15px;
+  border: var(--pixel-border) solid #000;
+  text-align: center;
+  transition: transform 0.1s;
+}
+
+.resort-item:hover {
+  transform: translate(2px, 2px);
+  background: #bbb;
+}
+
+.resort-item.active {
+  background: var(--sidebar-bg);
+  box-shadow: inset 4px 4px 0 #000;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.header-nav {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 24px;
+  padding: 5px 10px;
+}
+
+.nav-link.active {
+  color: var(--text-active);
+  border-bottom: 4px solid #000;
+}
+
+.status-summary {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+/* Mood Character */
+.mood-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 40px;
+  min-height: 300px;
+}
+
+.mood-img {
+  max-width: 100%;
+  image-rendering: pixelated;
+  border: var(--pixel-border) solid #000;
+}
+
+/* Weather Strip */
+.weather-strip {
+  display: flex;
+  overflow-x: auto;
+  gap: 20px;
+  background: #3d3633;
+  /* Darker brown for contrast */
+  padding: 30px 20px;
+  margin-bottom: 40px;
+  color: #fff;
+  min-height: 160px;
+  border: var(--pixel-border) solid #000;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.1);
+}
+
+.weather-hour {
+  flex: 0 0 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+}
+
+.weather-hour img {
+  width: 40px;
+  height: 40px;
+  image-rendering: pixelated;
+}
+
+.weather-hour .pop {
+  color: #add8e6;
+  font-size: 14px;
+}
+
+/* Charts */
+.snow-charts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chart-label {
+  text-align: center;
+  font-size: 18px;
+  color: var(--text-muted);
+}
+
+.snow-charts {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 180px;
+  padding: 0 20px;
+  border-bottom: 2px solid #000;
+}
+
+.bar {
+  width: 35px;
+  background: #a5d8ff;
+  /* Light blue for snow */
+  border: 2px solid #000;
+  border-bottom: none;
+  transition: height 0.3s;
+  position: relative;
+}
+
+.bar:hover::after {
+  content: attr(title);
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000;
+  color: #fff;
+  padding: 2px 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+    border-right: none;
+    border-bottom: var(--pixel-border) solid #000;
+  }
+
+  .resort-item {
+    margin: 5px;
+    flex: 0 0 auto;
+  }
+}
