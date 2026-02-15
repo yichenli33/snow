@@ -96,7 +96,7 @@ function updateUI() {
   renderDatePicker();
 
   // Evaluate mood based on selected day's data if available, else overall
-  const mood = evaluateMood(weatherData);
+  const mood = evaluateMood(weatherData, selectedOffset);
   const config = MOOD_CONFIG[mood] || MOOD_CONFIG[MOODS.CARVING];
 
   // Update Summary and Visual

@@ -15,25 +15,26 @@ export const MOODS = {
  * @param {Object} data - Processed weather data from API
  * @returns {Object} { signals, mood }
  */
-export function evaluateMood(data) {
+export function evaluateMood(data, offset = 0) {
     const { hourly, daily } = data;
 
-    // Signal A: Recent snow in the next 48 hours (sum of hourly.snow.1h)
-    const snow48h_mm = hourly.slice(0, 48).reduce((sum, h) => sum + (h.snow?.['1h'] || 0), 0);
+    // Signal A: Recent snow in the next 48 hours (sum of hourly.snow.1h) from selected offset
+    const startIdx = offset * 24;
+    const snow48h_mm = hourly.slice(startIdx, startIdx + 48).reduce((sum, h) => sum + (h.snow?.['1h'] || 0), 0);
 
-    // Signal B: Warm streak risk (Count of daily.temp.max >= 4 in next 3 and 5 days)
-    const warm3d_count = daily.slice(0, 3).filter(d => d.temp.max >= 4).length;
-    const warm5d_count = daily.slice(0, 5).filter(d => d.temp.max >= 4).length;
+    // Signal B: Warm streak risk (Count of daily.temp.max >= 4 in next 3 and 5 days) from selected offset
+    const warm3d_count = daily.slice(offset, offset + 3).filter(d => d.temp.max >= 4).length;
+    const warm5d_count = daily.slice(offset, offset + 5).filter(d => d.temp.max >= 4).length;
 
     // Signal C: Sunny streak risk (Clear/800-802 and UVI >= 5)
     const isSunny = (d) => [800, 801, 802].includes(d.weather[0].id) && d.uvi >= 5;
-    const sun3d_count = daily.slice(0, 3).filter(isSunny).length;
-    const sun5d_count = daily.slice(0, 5).filter(isSunny).length;
+    const sun3d_count = daily.slice(offset, offset + 3).filter(isSunny).length;
+    const sun5d_count = daily.slice(offset, offset + 5).filter(isSunny).length;
 
     // Signal D: Ice risk from freeze thaw (max >= 3 and min <= -3)
-    const freezethaw_count = daily.slice(0, 3).filter(d => d.temp.max >= 3 && d.temp.min <= -3).length;
+    const freezethaw_count = daily.slice(offset, offset + 3).filter(d => d.temp.max >= 3 && d.temp.min <= -3).length;
 
-    const snow2d_mm = (daily[0].snow || 0) + (daily[1].snow || 0);
+    const snow2d_mm = (daily[offset]?.snow || 0) + (daily[offset + 1]?.snow || 0);
 
     // --- Map to Moods ---
 
