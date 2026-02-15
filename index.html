@@ -1,21 +1,26 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app">
-      <aside class="sidebar" id="resort-sidebar"></aside>
-      <main class="main-content">
-        <nav class="header-nav">
-          <span class="nav-link">Yesterday</span>
-          <span class="nav-link active">Today</span>
-          <span class="nav-link">Tomorrow</span>
-        </nav>
-        
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+</head>
+
+<body>
+  <div id="app">
+    <aside class="sidebar">
+      <div class="search-container">
+        <input type="text" id="resort-search" placeholder="Search..." />
+        <span class="search-icon">🔍</span>
+      </div>
+      <div id="resort-sidebar-content"></div>
+    </aside>
+    <main class="main-content">
+      <div class="main-card">
+        <nav class="header-nav" id="date-picker"></nav>
+
         <div id="mood-detail">
           <h1 class="status-summary" id="mood-summary">Loading...</h1>
           <div class="mood-container" id="mood-visual">
@@ -23,10 +28,11 @@
           </div>
         </div>
 
-        <div class="weather-strip" id="hourly-forecast"></div>
-        <div class="snow-charts" id="snow-chart"></div>
-      </main>
-    </div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+        <div class="forecast-container" id="full-forecast"></div>
+      </div>
+    </main>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>

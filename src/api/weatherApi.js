@@ -6,10 +6,15 @@ const API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
 const BASE_URL = 'https://api.openweathermap.org/data/3.0/onecall';
 
 export const RESORTS = [
-    { name: 'Northstar', lat: 39.2746, lon: -120.1211 },
-    { name: 'Heavenly', lat: 38.9353, lon: -119.9400 },
-    { name: 'Kirkwood', lat: 38.6845, lon: -120.0655 },
-    { name: 'Sugar Mountain', lat: 36.1298, lon: -81.8565 },
+    { name: 'Heavenly', region: 'California', lat: 38.9353, lon: -119.9400 },
+    { name: 'Northstar', region: 'California', lat: 39.2746, lon: -120.1211 },
+    { name: 'Kirkwood', region: 'California', lat: 38.6845, lon: -120.0655 },
+    { name: 'Park City Mountain', region: 'Utah', lat: 40.6461, lon: -111.4980 },
+    { name: 'Vail', region: 'Colorado', lat: 39.6403, lon: -106.3742 },
+    { name: 'Beaver Creek', region: 'Colorado', lat: 39.6050, lon: -106.5165 },
+    { name: 'Breckenridge', region: 'Colorado', lat: 39.4817, lon: -106.0384 },
+    { name: 'Keystone', region: 'Colorado', lat: 39.6051, lon: -105.9531 },
+    { name: 'Stevens Pass', region: 'Washington', lat: 47.7463, lon: -121.0858 },
 ];
 
 /**
