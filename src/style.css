@@ -9,7 +9,7 @@
   --text-muted: #666;
   --accent-color: #fba94b;
   /* Orange accent */
-  --item-bg: #f5f5f5;
+  --item-bg: white;
   --item-hover: #e8e8e8;
   --font-pixel: 'VT323', monospace;
   --radius-lg: 20px;
@@ -46,7 +46,7 @@ body {
 
 .search-container {
   position: relative;
-  background: #f5f5f5;
+  background: white;
   border-radius: 20px;
   padding: 8px 15px;
   display: flex;
@@ -174,27 +174,33 @@ body {
 .mood-img {
   height: 100%;
   image-rendering: pixelated;
+  border-radius: var(--radius-md);
 }
 
 /* Unified Forecast Layout */
 .forecast-container {
   display: flex;
   margin-top: 20px;
-  border-top: 1px solid #f0f0f0;
-  min-height: 220px;
+  border-top: 1px solid white;
+  height: 300px;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .forecast-content {
   display: flex;
   width: 100%;
   align-items: center;
+  height: 100%;
 }
 
 .hourly-scroll {
   flex: 1;
   display: flex;
   overflow-x: auto;
-  padding: 20px 0;
+  padding: 10px 0;
+  align-items: center;
 }
 
 .forecast-column {
