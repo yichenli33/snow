@@ -15,6 +15,30 @@
   --radius-lg: 20px;
   --radius-md: 12px;
   --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  z-index: 150;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+body.drawer-open {
+  overflow: hidden;
+}
+
+body.drawer-open .drawer-backdrop {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 body {
@@ -42,6 +66,18 @@ body {
   flex-direction: column;
   gap: 20px;
   overflow-y: auto;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.resort-selector {
+  display: none;
+}
+
+.drawer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .search-container {
@@ -114,19 +150,20 @@ body {
   box-shadow: var(--shadow-soft);
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* Date Picker */
 .header-nav {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   margin-bottom: 15px;
   overflow-x: auto;
   overflow-y: hidden;
   height: auto;
   min-height: fit-content;
-  padding: 10px 0;
+  padding: 10px 20px;
 }
 
 .nav-link {
@@ -330,36 +367,173 @@ body {
 }
 
 /* Scrollbar styling */
-.forecast-container::-webkit-scrollbar,
-.sidebar::-webkit-scrollbar {
+::-webkit-scrollbar {
   height: 6px;
   width: 6px;
 }
 
-.forecast-container::-webkit-scrollbar-thumb,
-.sidebar::-webkit-scrollbar-thumb {
-  background: #ddd;
+::-webkit-scrollbar-thumb {
+  background: transparent;
   border-radius: 10px;
+  transition: background 0.3s;
 }
 
+.sidebar:hover::-webkit-scrollbar-thumb,
+.forecast-container:hover::-webkit-scrollbar-thumb,
+.is-scrolling::-webkit-scrollbar-thumb {
+  background: #ddd;
+}
+
+
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 1150px) {
+  body {
+    overflow: auto;
+    height: auto;
+  }
+
   #app {
     flex-direction: column;
-    overflow-y: auto;
+    height: auto;
+    width: 100%;
   }
 
   .sidebar {
     width: 100%;
     height: auto;
+    padding: 10px;
+    box-sizing: border-box;
+    background: var(--bg-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    overflow: visible;
+    /* Ensure absolute children aren't clipped */
+    transition: z-index 0.3s;
+  }
+
+  .sidebar.expanded {
+    z-index: 200;
+    /* Above drawer-backdrop (150) */
+  }
+
+  .resort-selector {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    font-size: 22px;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .resort-selector:hover {
+    border-color: var(--accent-color);
+  }
+
+  .sidebar.expanded .resort-selector {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom: 1px solid #eee;
+    z-index: 201;
+    /* Above drawer-content (200) */
+    position: relative;
+  }
+
+  .drawer-icon {
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.expanded .drawer-icon {
+    transform: rotate(180deg);
+  }
+
+  .drawer-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    box-shadow: var(--shadow-lg);
+    border-bottom-left-radius: var(--radius-md);
+    border-bottom-right-radius: var(--radius-md);
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: all 0.3s ease;
+    padding: 0;
+    /* JS will control visibility or we use classes */
+  }
+
+  .sidebar.expanded .drawer-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .search-container {
+    padding: 15px 20px;
+    border-radius: 0;
+    background: white;
+  }
+
+  #resort-sidebar-content {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0 20px 20px 20px;
   }
 
   .main-content {
     padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
   }
+
 
   .main-card {
     height: auto;
     min-height: 600px;
+    padding: 20px;
+  }
+
+  .mood-container {
+    height: auto;
+    min-height: 250px;
+  }
+
+  .forecast-container {
+    flex-wrap: wrap;
+    height: auto;
+  }
+
+  .forecast-content {
+    flex-direction: column;
+    height: auto;
+    align-items: stretch;
+  }
+
+  .stats-divider {
+    display: none;
+  }
+
+  .stats-panel {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    border-top: 1px dashed rgba(255, 255, 255, 0.3);
+  }
+
+  .hourly-scroll {
+    width: 100%;
+    overflow-x: auto;
+    padding: 20px 0;
   }
 }

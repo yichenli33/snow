@@ -9,13 +9,20 @@
 </head>
 
 <body>
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
   <div id="app">
     <aside class="sidebar">
-      <div class="search-container">
-        <input type="text" id="resort-search" placeholder="Search..." />
-        <span class="search-icon">🔍</span>
+      <div id="resort-selector-trigger" class="resort-selector">
+        <span id="selected-resort-name">Select Resort</span>
+        <i data-lucide="chevron-down" class="dropdown-icon"></i>
       </div>
-      <div id="resort-sidebar-content"></div>
+      <div class="drawer-content">
+        <div class="search-container">
+          <input type="text" id="resort-search" placeholder="Search..." />
+          <i data-lucide="search" class="search-icon"></i>
+        </div>
+        <div id="resort-sidebar-content"></div>
+      </div>
     </aside>
     <main class="main-content">
       <div class="main-card">
@@ -32,6 +39,7 @@
       </div>
     </main>
   </div>
+  <script src="https://unpkg.com/lucide@latest"></script>
   <script type="module" src="/src/main.js"></script>
 </body>
 

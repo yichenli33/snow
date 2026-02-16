@@ -9,6 +9,9 @@ let searchQuery = '';
 
 const resortSidebarContent = document.getElementById('resort-sidebar-content');
 const resortSearch = document.getElementById('resort-search');
+const resortSelectorTrigger = document.getElementById('resort-selector-trigger');
+const selectedResortName = document.getElementById('selected-resort-name');
+const sidebar = document.querySelector('.sidebar');
 const moodSummary = document.getElementById('mood-summary');
 const moodVisual = document.getElementById('mood-visual');
 const fullForecast = document.getElementById('full-forecast');
@@ -28,14 +31,56 @@ const MOOD_CONFIG = {
 async function init() {
   setupEventListeners();
   renderSidebar();
+  setupScrollbarBehavior(datePicker);
+  if (window.lucide) {
+    window.lucide.createIcons();
+  }
   await loadResort(RESORTS[0]);
 }
+
+function setupScrollbarBehavior(element) {
+  let scrollTimeout;
+  element.addEventListener('scroll', () => {
+    element.classList.add('is-scrolling');
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      element.classList.remove('is-scrolling');
+    }, 1000);
+  });
+}
+
 
 function setupEventListeners() {
   resortSearch.addEventListener('input', (e) => {
     searchQuery = e.target.value.toLowerCase();
     renderSidebar();
   });
+
+  resortSelectorTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isExpanded = sidebar.classList.toggle('expanded');
+    document.body.classList.toggle('drawer-open', isExpanded);
+    if (isExpanded) {
+      resortSearch.focus();
+    }
+  });
+
+  const backdrop = document.getElementById('drawer-backdrop');
+  if (backdrop) {
+    backdrop.addEventListener('click', () => {
+      sidebar.classList.remove('expanded');
+      document.body.classList.remove('drawer-open');
+    });
+  }
+
+  document.addEventListener('click', () => {
+    sidebar.classList.remove('expanded');
+    document.body.classList.remove('drawer-open');
+  });
+
+  // Prevent closing when clicking inside the expanded area
+  resortSearch.addEventListener('click', (e) => e.stopPropagation());
+  resortSidebarContent.addEventListener('click', (e) => e.stopPropagation());
 }
 
 /**
@@ -69,11 +114,16 @@ function renderSidebar() {
  */
 window.loadResortByName = (name) => {
   const resort = RESORTS.find(r => r.name === name);
-  if (resort) loadResort(resort);
+  if (resort) {
+    loadResort(resort);
+    sidebar.classList.remove('expanded');
+    document.body.classList.remove('drawer-open');
+  }
 };
 
 async function loadResort(resort) {
   currentResort = resort;
+  if (selectedResortName) selectedResortName.innerText = resort.name;
   moodSummary.innerText = 'Loading...';
   renderSidebar();
   weatherData = await fetchWeatherData(resort.lat, resort.lon);
@@ -128,6 +178,7 @@ function renderDatePicker() {
       </div>
     `;
   }).join('');
+  setupScrollbarBehavior(datePicker);
 }
 
 function renderStats(daily) {
@@ -197,6 +248,8 @@ function renderFullForecast() {
         ${statsHtml}
       </div>
     `;
+    const scrollContainer = fullForecast.querySelector('.hourly-scroll');
+    if (scrollContainer) setupScrollbarBehavior(scrollContainer);
   } else {
     const tempMax = Math.round(daily.temp.max);
     const tempMin = Math.round(daily.temp.min);
